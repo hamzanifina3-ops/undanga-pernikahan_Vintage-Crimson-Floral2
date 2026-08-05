@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undangan Pernikahan Digital</title>
+    
+    <!-- Google Fonts: Script & Serif -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --crimson: #800000;
+            --olive: #556B2F;
+            --cream: #FDFBF7;
+            --gold: #B8860B;
+            --dark-text: #3e3b36;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--cream);
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* LAYAR UTAMA / COVER */
+        #cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-image: url('https://z-cdn-media.chatglm.cn/files/b96a1832-26be-4f9a-b58d-8ccdca20fce0.png?auth_key=1885814015-dc8d11a7b7f6466ea45d7db194d0b482-0-2f61b36b2a07aa2b14a67b233b3603fb');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: var(--cream);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 100;
+            transition: opacity 1s ease, visibility 1s ease;
+            padding: 20px;
+        }
+
+        #cover.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .cover-content {
+            background: rgba(253, 251, 247, 0.85);
+            padding: 40px 30px;
+            border-radius: 15px;
+            border: 2px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(128, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            backdrop-filter: blur(3px);
+        }
+
+        .cover-content h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: var(--olive);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .cover-content h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 52px;
+            color: var(--crimson);
+            margin: 10px 0;
+            line-height: 1.2;
+        }
+
+        .cover-content p {
+            font-size: 14px;
+            margin-bottom: 20px;
+            color: var(--dark-text);
+        }
+
+        .btn-open {
+            background-color: var(--crimson);
+            color: var(--cream);
+            border: none;
+            padding: 12px 30px;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-open:hover {
+            background-color: var(--gold);
+            transform: scale(1.05);
+        }
+
+        /* ISI UNDANGAN */
+        #invitation {
+            display: none;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            background-image: url('https://z-cdn-media.chatglm.cn/files/6806383f-00c8-4d6e-99e1-36214b2d23c0.png?auth_key=1885814015-a4b760ec9b0043cca404f1de31c6b6f8-0-c79db0caa19ff8a081034744e11b206b');
+            background-position: bottom center;
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            background-attachment: fixed;
+            background-color: var(--cream);
+            position: relative;
+            z-index: 2;
+        }
+
+        #invitation.show {
+            opacity: 1;
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background-color: rgba(253, 251, 247, 0.9); 
+        }
+        
+        section:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+
+        h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 42px;
+            color: var(--crimson);
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--olive);
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 15px;
+            max-width: 600px;
+        }
+
+        .nama {
+            font-family: 'Great Vibes', cursive;
+            font-size: 48px;
+            color: var(--crimson);
+            margin: 10px 0;
+        }
+
+        .ortu {
+            font-size: 14px;
+            color: var(--dark-text);
+            margin-bottom: 30px;
+        }
+
+        /* BINGKAI FOTO MEMPELAI */
+        .couple-frame-container {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 40px;
+        }
+
+        .ring-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            object-fit: contain;
+        }
+
+        .couple-photo {
+            width: 165px;
+            height: 165px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            z-index: 1;
+            position: relative;
+            margin-top: 5px; 
+        }
+
+        .couple-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        /* Kartu Acara */
+        .card {
+            background: white;
+            border: 1px solid var(--gold);
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .card h3 {
+            font-size: 24px;
+            color: var(--crimson);
+        }
+
+        .date {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--olive);
+            margin: 10px 0;
+        }
+
+        /* Galeri */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            max-width: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+        }
+
+        .gallery img:nth-child(1) {
+            grid-column: span 2;
+            height: 250px;
+        }
+
+        /* QR Code */
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            background: white;
+            padding: 10px;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Amplop Digital */
+        .amplop {
+            background: var(--olive);
+            color: var(--cream);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .amplop p { color: var(--cream); }
+        .amplop .rek {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
+
+        /* FORM UCAPAN / WISHING WALL */
+        .wishing-form {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .wishing-form input, .wishing-form textarea {
+            padding: 12px;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            font-family: 'Lato', sans-serif;
+            font-size: 14px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--dark-text);
+        }
+
+        .wishing-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .wishing-form button {
+            background-color: var(--crimson);
+            color: var(--cream);
+            border: none;
+            padding: 12px;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .wishing-form button:hover {
+            background-color: var(--gold);
+        }
+
+        .wishes-display {
+            width: 100%;
+            max-width: 500px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .wish-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--olive);
+        }
+
+        .wish-item .wish-name {
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            color: var(--crimson);
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .wish-item .wish-text {
+            font-size: 14px;
+            color: var(--dark-text);
+        }
+
+        /* Tombol Musik */
+        #music-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--crimson);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 999; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background 0.3s;
+        }
+
+        #music-btn:hover { background: var(--gold); }
+        #music-btn svg { width: 24px; height: 24px; }
+
+        /* Penutup */
+        .quote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 18px;
+            color: var(--olive);
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+
+        footer {
+            background-color: var(--crimson);
+            color: var(--cream);
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        footer p { color: var(--cream); font-size: 14px; }
+        footer .nama { color: var(--cream); font-size: 36px; }
+
+        @media (min-width: 768px) {
+            .cover-content h1 { font-size: 64px; }
+            h2 { font-size: 56px; }
+            .nama { font-size: 64px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AUDIO MUSIK -->
+    <audio id="bg-music" loop>
+        <source src="sampaijadidebu.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- TOMBOL MUSIK -->
+    <button id="music-btn" style="display: none;">
+        <svg id="icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+        <svg id="icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg>
+    </button>
+
+    <!-- COVER / LAYAR UTAMA -->
+    <div id="cover">
+        <div class="cover-content">
+            <h3>The Wedding Of</h3>
+            <h1>Budi & Dinda</h1>
+            <p>Kepada Yth. Bapak/Ibu/Saudara/i</p>
+            <button class="btn-open" onclick="openInvitation()">Buka Undangan</button>
+        </div>
+    </div>
+
+    <!-- ISI UNDANGAN -->
+    <div id="invitation">
+        
+        <!-- BAGIAN PEMBUKA -->
+        <section>
+            <div style="max-width: 600px;">
+                <p style="font-size: 18px; font-style: italic; color: var(--olive);">Assalamu’alaikum Wr. Wb.</p>
+                <br>
+                <p>Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan acara pernikahan putra-putri kami. Tanpa mengurangi rasa hormat, kami bermaksud mengundang Bapak/Ibu/Saudara/i pada acara pernikahan kami.</p>
+            </div>
+        </section>
+
+        <!-- NAMA PASANGAN -->
+        <section>
+            <div class="couple-frame-container">
+                <div class="couple-photo">
+                    <img src="https://z-cdn-media.chatglm.cn/files/00b8e01e-a7b6-4ed9-9e3a-80ff1d1e131a.png?auth_key=1885814015-e216caa54cf0467592259110d77a9eaf-0-595c2cf47fff97dedeee94e3fdac4c70" alt="Foto Pasangan">
+                </div>
+                <img src="https://z-cdn-media.chatglm.cn/files/29233a9a-ddf7-429c-965d-70f432393d91.png?auth_key=1885814015-8fcabc5563c54016a726472c302ee584-0-d7a3058c1ad7974cc42f4d071b23d710" alt="Bingkai Bunga" class="ring-frame">
+            </div>
+            
+            <div class="nama">Budi Santoso</div>
+            <p class="ortu">Putra dari Bapak Ayah Budi & Ibu Budi</p>
+            
+            <h2 style="font-size: 32px; color: var(--gold);">&</h2>
+            
+            <div class="nama">Dinda Ayu</div>
+            <p class="ortu">Putri dari Bapak Ayah Dinda & Ibu Dinda</p>
+        </section>
+
+        <!-- DETAIL ACARA -->
+        <section>
+            <h2>The Event</h2>
+            <p style="margin-bottom: 40px;">Insyaallah akan dilaksanakan pada:</p>
+
+            <div class="card">
+                <h3>Akad Nikah</h3>
+                <div class="date">Sabtu, 20 Mei 2024</div>
+                <p>08.00 - 10.00 WIB</p>
+                <p style="font-size: 14px; margin-top: 10px; color: var(--olive);">Masjid Agung Al-Falah<br>Jl. Kebon Jeruk No.1, Jakarta</p>
+            </div>
+
+            <div class="card">
+                <h3>Resepsi</h3>
+                <div class="date">Sabtu, 20 Mei 2024</div>
+                <p>11.00 - 14.00 WIB</p>
+                <p style="font-size: 14px; margin-top: 10px; color: var(--olive);">Ballroom Garden Hotel<br>Jl. Mawar Melati No.5, Jakarta</p>
+            </div>
+
+            <p style="margin-top: 20px; font-size: 14px;"><strong>Dresscode:</strong> Semi Formal / Earth Tone</p>
+        </section>
+
+        <!-- GALERI PASANGAN -->
+        <section>
+            <h2>Our Gallery</h2>
+            <p style="margin-bottom: 20px;">Beberapa momen indah bersama kami.</p>
+            
+            <div class="gallery">
+                <img src="https://z-cdn-media.chatglm.cn/files/6806383f-00c8-4d6e-99e1-36214b2d23c0.png?auth_key=1885814015-a4b760ec9b0043cca404f1de31c6b6f8-0-c79db0caa19ff8a081034744e11b206b" alt="Foto 1">
+                <img src="https://z-cdn-media.chatglm.cn/files/29233a9a-ddf7-429c-965d-70f432393d91.png?auth_key=1885814015-8fcabc5563c54016a726472c302ee584-0-d7a3058c1ad7974cc42f4d071b23d710" alt="Foto 2">
+                <img src="https://z-cdn-media.chatglm.cn/files/b96a1832-26be-4f9a-b58d-8ccdca20fce0.png?auth_key=1885814015-dc8d11a7b7f6466ea45d7db194d0b482-0-2f61b36b2a07aa2b14a67b233b3603fb" alt="Foto 3">
+                <img src="https://z-cdn-media.chatglm.cn/files/00b8e01e-a7b6-4ed9-9e3a-80ff1d1e131a.png?auth_key=1885814015-e216caa54cf0467592259110d77a9eaf-0-595c2cf47fff97dedeee94e3fdac4c70" alt="Foto 4">
+            </div>
+        </section>
+
+        <!-- PETA LOKASI & RSVP -->
+        <section>
+            <h2>Location</h2>
+            <p>Berikut adalah peta lokasi tempat acara kami:</p>
+            
+            <div class="qr-code">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://maps.google.com" alt="QR Code Google Maps">
+            </div>
+            
+            <a href="https://maps.google.com" target="_blank" style="display: inline-block; background: var(--olive); color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; margin-top: 10px;">Buka di Google Maps</a>
+
+            <div style="margin-top: 40px;">
+                <h3>RSVP</h3>
+                <p>Konfirmasi kehadiran Anda:</p>
+                <a href="https://wa.me/6281234567890" target="_blank" style="display: inline-block; background: var(--crimson); color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; margin-top: 10px;">Konfirmasi via WhatsApp</a>
+            </div>
+
+            <div class="amplop" style="max-width: 500px; width: 90%; margin-top: 40px;">
+                <h3 style="color: var(--cream);">Wedding Gift</h3>
+                <p>Doa restu Anda adalah hadiah terindah. Namun, jika ingin memberikan tanda kasih, dapat melalui:</p>
+                <div class="rek">Bank BCA - 1234567890</div>
+                <p style="font-size: 14px;">a.n. Budi Santoso</p>
+            </div>
+        </section>
+
+        <!-- UCAPAN & DOA RESTU (WISHING WALL) -->
+        <section>
+            <h2>Wishes & Prayers</h2>
+            <p style="margin-bottom: 20px;">Berikan ucapan terbaik dan doa restu untuk kedua mempelai.</p>
+            
+            <div class="wishing-form">
+                <input type="text" id="wishName" placeholder="Nama Anda" required>
+                <textarea id="wishText" placeholder="Tulis ucapan dan doa restu Anda..." required></textarea>
+                <button onclick="submitWish()">Kirim Ucapan</button>
+            </div>
+
+            <div class="wishes-display" id="wishesDisplay">
+                <div class="wish-item">
+                    <div class="wish-name">Keluarga Besar</div>
+                    <div class="wish-text">Selamat menempuh hidup baru Budi & Dinda. Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Aamiin.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PENUTUP -->
+        <section>
+            <div class="quote">
+                "Dan di antara tanda-tanda kekuasaan-Nya diciptakan-Nya untukmu pasangan hidup dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang. Sungguh pada yang demikian itu benar-benar terdapat tanda-tanda bagi kaum yang berpikir."
+                <br><br>
+                <strong>(QS. Ar-Rum: 21)</strong>
+            </div>
+
+            <p style="margin-top: 20px;">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kedua mempelai.</p>
+            <p style="margin-top: 10px; font-size: 18px; font-style: italic; color: var(--olive);">Wassalamu’alaikum Wr. Wb.</p>
+        </section>
+
+        <footer>
+            <p>Terima Kasih</p>
+            <div class="nama">Budi & Dinda</div>
+            <p style="font-size: 12px; margin-top: 20px; opacity: 0.8;">2024 &copy; Wedding Invitation</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- FUNGSI BUKA UNDANGAN ---
+        function openInvitation() {
+            document.getElementById('cover').classList.add('hidden');
+            
+            const invitation = document.getElementById('invitation');
+            invitation.style.display = 'block';
+            setTimeout(() => {
+                invitation.classList.add('show');
+            }, 100);
+
+            document.getElementById('music-btn').style.display = 'flex';
+            playMusic();
+        }
+
+        // --- FUNGSI MUSIK ---
+        const music = document.getElementById('bg-music');
+        const iconPlay = document.getElementById('icon-play');
+        const iconPause = document.getElementById('icon-pause');
+        let isPlaying = false;
+
+        function playMusic() {
+            music.play().then(() => {
+                isPlaying = true;
+                iconPlay.style.display = 'none';
+                iconPause.style.display = 'block';
+            }).catch(error => {
+                console.log("Autoplay diblokir oleh browser");
+            });
+        }
+
+        function pauseMusic() {
+            music.pause();
+            isPlaying = false;
+            iconPlay.style.display = 'block';
+            iconPause.style.display = 'none';
+        }
+
+        document.getElementById('music-btn').addEventListener('click', function() {
+            if (isPlaying) { pauseMusic(); } else { playMusic(); }
+        });
+
+        // --- FUNGSI TEMPAT UCAPAN ---
+        function submitWish() {
+            const name = document.getElementById('wishName').value.trim();
+            const text = document.getElementById('wishText').value.trim();
+
+            if (name === '' || text === '') {
+                alert('Mohon isi nama dan ucapan Anda.');
+                return;
+            }
+
+            const display = document.getElementById('wishesDisplay');
+            const newWish = document.createElement('div');
+            newWish.classList.add('wish-item');
+            newWish.innerHTML = `
+                <div class="wish-name">${escapeHTML(name)}</div>
+                <div class="wish-text">${escapeHTML(text)}</div>
+            `;
+            
+            // Tambahkan di paling atas
+            display.prepend(newWish);
+
+            // Kosongkan form
+            document.getElementById('wishName').value = '';
+            document.getElementById('wishText').value = '';
+        }
+
+        // Fungsi keamanan agar tag HTML tidak terbaca (mencegah XSS sederhana)
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
+        }
+    </script>
+</body>
+</html>
